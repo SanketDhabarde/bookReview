@@ -1,0 +1,26 @@
+{
+  "name": "bookreview",
+  "version": "1.0.0",
+  "description": "a book review web app",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SanketDhabarde/bookReview.git"
+  },
+  "author": "sanket",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SanketDhabarde/bookReview/issues"
+  },
+  "homepage": "https://github.com/SanketDhabarde/bookReview#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "ejs": "^3.1.5",
+    "express": "^4.17.1",
+    "method-override": "^3.0.0",
+    "mongoose": "^5.11.8"
+  }
+}

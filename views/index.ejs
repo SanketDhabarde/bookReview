@@ -1,0 +1,14 @@
+<%- include("partials/header")%>
+<h1>Welcome to book review!</h1>
+<a href="/books/new">add new book</a>
+
+<div>
+    <% books.forEach(function(book){ %>
+        <div>
+            <img src="<%= book.image %>" alt="">
+            <p><%=book.author%></p>
+            <a href="/books/<%= book._id%>">more info</a>
+        </div>
+    <% });%>
+</div>
+<%- include("partials/footer")%>

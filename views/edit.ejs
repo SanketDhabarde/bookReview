@@ -1,0 +1,10 @@
+<%- include("partials/header")%>
+<form action="/books/<%=book._id%>?_method=PUT" method="POST">
+    <input type="text" name="book[name]" value="<%=book.name%>">
+    <input type="text" name="book[image]" value="<%=book.image%>">
+    <input type="text" name="book[price]" value="<%=book.price%>">
+    <input type="text" name="book[author]" value="<%=book.author%>">
+    <input type="text" name="book[description]" value="<%=book.description%>">
+    <button>Edit</button>
+</form>
+<%- include("partials/header")%>

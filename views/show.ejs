@@ -1,0 +1,16 @@
+<%- include("partials/header")%>
+<div>
+    <p><%=book.name%></p>
+    <img src="<%= book.image %>" alt="">
+    <p>author: <%= book.author %></p>
+    <p>price: <%= book.price %></p>
+    <p><%= book.description%></p>
+    <p>
+        <a href="/books/<%=book._id%>/edit">edit info</a>
+        <form action="/books/<%=book._id%>?_method=DELETE" method="POST">
+            <button>DELETE</button>
+        </form>
+    </p>
+</div>
+
+<%- include("partials/footer")%>
