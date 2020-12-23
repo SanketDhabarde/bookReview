@@ -24,11 +24,11 @@ var booksSchema = new mongoose.Schema({
 var Book = mongoose.model("Book", booksSchema);
 
 app.get("/", function(req, res){
-    res.send("landing page");
+    res.redirect("/books");
 });
 
 // =======
-//ROUTES
+// ROUTES
 // =======
 
 // INDEX - list all the books
@@ -101,8 +101,6 @@ app.delete("/books/:id", function(req, res){
         }
     });
 });
-
-
 
 app.listen(3000, function(){
     console.log("server is started....");
