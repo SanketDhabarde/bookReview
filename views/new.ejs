@@ -1,10 +1,31 @@
 <%- include("partials/header")%>
-<form action="/books" method="POST">
-    <input type="text" name="book[name]" placeholder="name of book">
-    <input type="text" name="book[image]" placeholder="image url">
-    <input type="text" name="book[price]" placeholder="price">
-    <input type="text" name="book[author]" placeholder="author name">
-    <input type="text" name="book[description]" placeholder="description">
-    <button>Submit</button>
-</form>
-<%- include("partials/header")%>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 text-center" id="formE">
+            <h2>Add a new Book</h2>
+            <form action="/books" method="POST">
+                <div class="mb-2">
+                    <input type="text" class="form-control" name="book[name]" placeholder="name of book">
+                </div>
+                <div class="mb-2">
+                    <input type="text" class="form-control" name="book[image]" placeholder="image url">
+                </div>
+                <div class="mb-2">
+                    <input type="text" class="form-control" name="book[price]" placeholder="price">
+                </div>
+                <div class="mb-2">
+                    <input type="text" class="form-control" name="book[author]" placeholder="author name">
+                </div>
+                <div class="mb-2">
+                    <input type="text" class="form-control" name="book[description]" placeholder="description">
+                </div>
+                <div class="mb-2">
+                    <button class="btn btn-primary form-control">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<%- include("partials/footer")%>

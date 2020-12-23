@@ -1,10 +1,29 @@
 <%- include("partials/header")%>
-<form action="/books/<%=book._id%>?_method=PUT" method="POST">
-    <input type="text" name="book[name]" value="<%=book.name%>">
-    <input type="text" name="book[image]" value="<%=book.image%>">
-    <input type="text" name="book[price]" value="<%=book.price%>">
-    <input type="text" name="book[author]" value="<%=book.author%>">
-    <input type="text" name="book[description]" value="<%=book.description%>">
-    <button>Edit</button>
-</form>
-<%- include("partials/header")%>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4 text-center" id="formE">
+            <h2>Edit the info of book</h2>
+            <form action="/books/<%=book._id%>?_method=PUT" method="POST">
+                <div class="mb-2">
+                    <input type="text" class="form-control" name="book[name]" value="<%=book.name%>">
+                </div>
+                <div class="mb-2">
+                    <input type="text" class="form-control" name="book[image]" value="<%=book.image%>">
+                </div>
+                <div class="mb-2">
+                    <input type="text" class="form-control" name="book[price]" value="<%=book.price%>">
+                </div>
+                <div class="mb-2">
+                    <input type="text" class="form-control" name="book[author]" value="<%=book.author%>">
+                </div>
+                <div class="mb-2">
+                    <input type="text" class="form-control" name="book[description]" value="<%=book.description%>">
+                </div>
+                <div class="mb-2">
+                    <button class="btn btn-primary form-control">Edit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<%- include("partials/footer")%>

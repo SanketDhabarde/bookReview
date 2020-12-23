@@ -1,14 +1,26 @@
 <%- include("partials/header")%>
-<h1>Welcome to book review!</h1>
-<a href="/books/new">add new book</a>
-
-<div>
-    <% books.forEach(function(book){ %>
-        <div>
-            <img src="<%= book.image %>" alt="">
-            <p><%=book.author%></p>
-            <a href="/books/<%= book._id%>">more info</a>
+<div class="container">
+    <main class="m-3 main">
+        <div class="p-5 rounded">
+          <h1>Welcome to book review!</h1>
+          <p class="lead">look at some of the best books reviews from user!</p>
+          <a href="/books/new" class="btn btn-primary">add new book</a>
         </div>
-    <% });%>
+    </main>
+      
+    <div class="row text-center">
+        <% books.forEach(function(book){ %>
+            <div class="col-md-3 col-sm-6">
+                <div class="img-thumbnail">
+                    <img src="<%= book.image %>" class="img-thumbnail" alt="">
+                    <p><%=book.name%></p>
+                    <p>
+                        <a href="/books/<%= book._id%>" class="btn btn-primary">more info</a>
+                    </p>
+                </div>
+            </div>
+        <% });%>
+    </div>
 </div>
+
 <%- include("partials/footer")%>

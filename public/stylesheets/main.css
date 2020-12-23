@@ -1,0 +1,22 @@
+.carousel-item img{
+    max-height: 100vh;
+}
+.img-thumbnail{
+    padding: 0;
+}
+nav{
+    position: fixed;
+}
+
+.main{
+    background-color: #E5E7EB;
+}
+.img-thumbnail .showImg{
+    width: 100%;
+}
+#deleteForm{
+    display: inline;
+}
+#formE{
+    margin: 1rem auto;
+}

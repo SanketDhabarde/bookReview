@@ -1,16 +1,28 @@
 <%- include("partials/header")%>
-<div>
-    <p><%=book.name%></p>
-    <img src="<%= book.image %>" alt="">
-    <p>author: <%= book.author %></p>
-    <p>price: <%= book.price %></p>
-    <p><%= book.description%></p>
-    <p>
-        <a href="/books/<%=book._id%>/edit">edit info</a>
-        <form action="/books/<%=book._id%>?_method=DELETE" method="POST">
-            <button>DELETE</button>
-        </form>
-    </p>
+<div class="container mt-2">
+    <div class="row">
+        <div class="col-md-3">
+            <ul class="list-group">
+                <li class="list-group-item active" aria-current="true"><%=book.name%></li>
+                <li class="list-group-item"><strong>Author: </strong><%= book.author %></li>
+                <li class="list-group-item"><strong>Price: </strong>  <%= book.price %></li>
+            </ul>
+        </div>
+        <div class="col-md-9">
+            <div class="img-thumbnail">
+                <img src="<%= book.image %>" class="img-thumbnail showImg" alt="">
+                <div class="m-3">
+                    <p><%= book.description%></p>
+                    <a href="/books/<%=book._id%>/edit" class="btn btn-warning">edit info</a>
+                    <form action="/books/<%=book._id%>?_method=DELETE" id="deleteForm" method="POST">
+                        <button class="btn btn-danger">DELETE</button>
+                    </form>
+                </div>
+                
+            </div>
+
+        </div>
+    </div>
 </div>
 
 <%- include("partials/footer")%>
