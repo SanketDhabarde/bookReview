@@ -2,6 +2,7 @@ var express = require("express"),
      app = express(),
      mongoose = require("mongoose"),
      methodOverride = require("method-override"),
+     Book = require("./models/books"),
      bodyParser = require("body-parser");
 
 
@@ -14,15 +15,6 @@ app.use(express.static(__dirname + "/public"));
 // DB config
 mongoose.connect('mongodb://localhost:27017/book_review', {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify:false});
 
-var booksSchema = new mongoose.Schema({
-    name: String,
-    image: String,
-    price: Number,
-    author: String,
-    description: String
-});
-
-var Book = mongoose.model("Book", booksSchema);
 
 app.get("/", function(req, res){
     res.redirect("/books");
@@ -38,14 +30,14 @@ app.get("/books", function(req, res){
         if(err){
             console.log(err);
         }else{
-            res.render("index", {books: allBooks});
+            res.render("books/index", {books: allBooks});
         }
     });
 });
 
 // NEW - form to add the new book
 app.get("/books/new", function(req, res){
-    res.render("new");
+    res.render("books/new");
 });
 
 // CREATE - create the new book
@@ -65,7 +57,7 @@ app.get("/books/:id", function(req, res){
        if(err){
            console.log(err);
        }else{
-           res.render("show",{book: foundBook});
+           res.render("books/show",{book: foundBook});
        }
    }); 
 });
@@ -76,7 +68,7 @@ app.get("/books/:id/edit", function(req, res){
         if(err){
             console.log(err);
         }else{
-            res.render("edit", {book: foundBook});
+            res.render("books/edit", {book: foundBook});
         }
     });
 });
@@ -102,6 +94,13 @@ app.delete("/books/:id", function(req, res){
         }
     });
 });
+
+// ==============
+// comment routes
+// ==============
+
+// form to add new comment
+
 
 app.listen(3000, function(){
     console.log("server is started....");

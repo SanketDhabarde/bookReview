@@ -8,7 +8,7 @@ nav{
     position: fixed;
 }
 
-.main{
+.main, #comment{
     background-color: #E5E7EB;
 }
 .img-thumbnail .showImg{
