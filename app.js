@@ -1,8 +1,11 @@
+const books = require("./models/books");
+
 var express = require("express"),
      app = express(),
      mongoose = require("mongoose"),
      methodOverride = require("method-override"),
      Book = require("./models/books"),
+     Comment = require("./models/comments"),
      bodyParser = require("body-parser");
 
 
@@ -53,7 +56,7 @@ app.post("/books", function(req, res){
 
 // SHOW - show more info about books
 app.get("/books/:id", function(req, res){
-   Book.findById(req.params.id, function(err, foundBook){
+   Book.findById(req.params.id).populate("comments").exec(function(err, foundBook){
        if(err){
            console.log(err);
        }else{
@@ -99,7 +102,70 @@ app.delete("/books/:id", function(req, res){
 // comment routes
 // ==============
 
-// form to add new comment
+//NEW- form to add new comment
+app.get("/books/:id/comments/new", function(req, res){
+    Book.findById(req.params.id, function(err, foundBook){
+        if(err){
+            console.log(err);
+        }else{
+            res.render("comments/new", {book: foundBook});
+        }
+    });
+});
+
+// CREATE - create the comment
+app.post("/books/:id/comments", function(req, res){
+    Book.findById(req.params.id, function(err, foundBook){
+        if(err){
+            console.log(err);
+        }else{
+            Comment.create(req.body.comment, function(err, comment){
+                if(err){
+                    console.log(err);
+                }else{
+                    // add comment to book db
+                    foundBook.comments.push(comment);
+                    foundBook.save();
+                    res.redirect("/books/"+ foundBook._id);
+                }
+            });
+        }
+    });
+});
+
+// EDIT - edit the comment
+app.get("/books/:id/comments/:comment_id/edit", function(req, res){
+    Comment.findById(req.params.comment_id, function(err, foundComment){
+        if(err){
+            console.log(err);
+        }else{
+            var book_id=req.params.id;
+            res.render("comments/edit",{comment: foundComment, book_id});
+        }
+    });
+});
+
+// UPDATE - update the edited comment
+app.put("/books/:id/comments/:comment_id", function(req, res){
+    Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, function(err, comment){
+        if(err){
+            console.log(err);
+        }else{
+            res.redirect("/books/"+ req.params.id);
+        }
+    });
+});
+
+// DELETE - delete the comment
+app.delete("/books/:id/comments/:comment_id", function(req, res){
+    Comment.findByIdAndRemove(req.params.comment_id, function(err){
+        if(err){
+            res.redirect("/books/"+ req.params.id);
+        }else{
+            res.redirect("/books/"+ req.params.id);
+        }
+    });
+});
 
 
 app.listen(3000, function(){

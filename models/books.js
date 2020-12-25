@@ -5,7 +5,13 @@ var booksSchema = new mongoose.Schema({
     image: String,
     price: Number,
     author: String,
-    description: String
+    description: String,
+    comments: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Comment"
+        }
+    ]
 });
 
 module.exports = mongoose.model("Book", booksSchema);
