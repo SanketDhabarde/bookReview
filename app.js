@@ -1,11 +1,12 @@
-const books = require("./models/books");
-
 var express = require("express"),
      app = express(),
      mongoose = require("mongoose"),
      methodOverride = require("method-override"),
      Book = require("./models/books"),
      Comment = require("./models/comments"),
+     User = require("./models/user"),
+     passport = require("passport"),
+     localStrategy = require("passport-local"),
      bodyParser = require("body-parser");
 
 
@@ -17,6 +18,18 @@ app.use(express.static(__dirname + "/public"));
 
 // DB config
 mongoose.connect('mongodb://localhost:27017/book_review', {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify:false});
+
+// passport config
+app.use(require("express-session")({
+    secret:"hello world",
+    resave:false,
+    saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new localStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 
 app.get("/", function(req, res){
@@ -39,16 +52,20 @@ app.get("/books", function(req, res){
 });
 
 // NEW - form to add the new book
-app.get("/books/new", function(req, res){
+app.get("/books/new", isLoggedIn, function(req, res){
     res.render("books/new");
 });
 
 // CREATE - create the new book
-app.post("/books", function(req, res){
+app.post("/books", isLoggedIn, function(req, res){
     Book.create(req.body.book, function(err, newBook){
         if(err){
             console.log(err);
         }else{
+            // save the user
+            newBook.user.username = req.user.username;
+            newBook.user.id = req.body._id;
+            newBook.save();
             res.redirect("/books");
         }
     });
@@ -103,7 +120,7 @@ app.delete("/books/:id", function(req, res){
 // ==============
 
 //NEW- form to add new comment
-app.get("/books/:id/comments/new", function(req, res){
+app.get("/books/:id/comments/new", isLoggedIn, function(req, res){
     Book.findById(req.params.id, function(err, foundBook){
         if(err){
             console.log(err);
@@ -114,7 +131,7 @@ app.get("/books/:id/comments/new", function(req, res){
 });
 
 // CREATE - create the comment
-app.post("/books/:id/comments", function(req, res){
+app.post("/books/:id/comments", isLoggedIn, function(req, res){
     Book.findById(req.params.id, function(err, foundBook){
         if(err){
             console.log(err);
@@ -123,6 +140,10 @@ app.post("/books/:id/comments", function(req, res){
                 if(err){
                     console.log(err);
                 }else{
+                    // save the user
+                    comment.author.username = req.user.username;
+                    comment.author.id = req.user._id;
+                    comment.save();
                     // add comment to book db
                     foundBook.comments.push(comment);
                     foundBook.save();
@@ -167,6 +188,55 @@ app.delete("/books/:id/comments/:comment_id", function(req, res){
     });
 });
 
+
+// ===========
+// AUTH ROUTES
+// ===========
+
+// register form
+app.get("/register", function(req, res){
+    res.render("register");
+});
+
+// handle the sign up logic
+app.post("/register", function(req, res){
+   var newUser = new User({username: req.body.username});
+   User.register(newUser, req.body.password, function(err, user){
+       if(err){
+           console.log(err);
+           return res.redirect("/register");
+       }
+       passport.authenticate("local")(req, res, function(){
+           res.redirect("/books");
+       })
+   });
+});
+
+// login form
+app.get("/login", function(req, res){
+    res.render("login");
+});
+
+// handle login login
+app.post("/login", passport.authenticate("local",{
+    successRedirect: "/books",
+    failureRedirect: "/login"
+}), function(req, res){
+});
+
+// logout route
+app.get("/logout", function(req, res){
+    req.logout();
+    res.redirect("/books");
+});
+
+// middleware
+function isLoggedIn(req, res, next){
+    if(req.isAuthenticated()){
+        return next();
+    }
+    res.redirect("/login");
+}
 
 app.listen(3000, function(){
     console.log("server is started....");

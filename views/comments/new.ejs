@@ -5,10 +5,7 @@
             <h2>Add your review</h2>
             <form action="/books/<%= book._id %>/comments" method="POST">
                 <div class="mb-2">
-                    <input type="text" class="form-control" name="comment[text]" placeholder="review">
-                </div>
-                <div class="mb-2">
-                    <input type="text" class="form-control" name="comment[author]" placeholder="author">
+                    <textarea name="comment[text]" class="form-control" cols="30" rows="8" placeholder="your reviews about book"></textarea>
                 </div>
                 <div class="mb-2">
                     <button class="btn btn-primary form-control">Submit</button>
