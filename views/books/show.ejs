@@ -12,6 +12,7 @@
             <div class="img-thumbnail">
                 <img src="<%= book.image %>" class="img-thumbnail showImg" alt="">
                 <div class="m-3">
+                    <p><%= book.name %></p>
                     <p><%= book.description%></p>
                     <p>
                         <em>Submitted by <%= book.user.username %></em>
@@ -19,7 +20,7 @@
                    <% if(currentUser && book.user.id.equals(currentUser._id)){ %>
                         <a href="/books/<%=book._id%>/edit" class="btn btn-warning">edit info</a>
                         <form action="/books/<%=book._id%>?_method=DELETE" id="deleteForm" method="POST">
-                            <button class="btn btn-danger">DELETE</button>
+                            <button class="btn btn-danger">Delete</button>
                         </form>
                    <% } %>
                 </div>
@@ -36,9 +37,9 @@
                         <em><span>  <%= comment.created.toDateString() %></span></em>
                         <p><%= comment.text%></p>
                         <% if(currentUser && comment.author.id.equals(currentUser._id)){ %>
-                            <a href="/books/<%=book._id%>/comments/<%= comment._id %>/edit" class="btn btn-sm btn-warning">edit</a>
+                            <a href="/books/<%=book._id%>/comments/<%= comment._id %>/edit" class="btn btn-sm btn-outline-warning">Edit</a>
                             <form action="/books/<%=book._id%>/comments/<%= comment._id%>?_method=DELETE" id="deleteForm" method="POST">
-                                <button class="btn btn-sm btn-danger">Delete</button>
+                                <button class="btn btn-sm btn-outline-danger">Delete</button>
                             </form>
                         <% } %>
                         
