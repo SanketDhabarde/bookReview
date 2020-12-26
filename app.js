@@ -31,6 +31,11 @@ passport.use(new localStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+app.use(function(req, res, next){
+    res.locals.currentUser = req.user;
+    next();
+});
+
 
 app.get("/", function(req, res){
     res.redirect("/books");
@@ -64,7 +69,7 @@ app.post("/books", isLoggedIn, function(req, res){
         }else{
             // save the user
             newBook.user.username = req.user.username;
-            newBook.user.id = req.body._id;
+            newBook.user.id = req.user._id;
             newBook.save();
             res.redirect("/books");
         }
@@ -83,7 +88,7 @@ app.get("/books/:id", function(req, res){
 });
 
 // EDIT - show the edit form of the book
-app.get("/books/:id/edit", function(req, res){
+app.get("/books/:id/edit", checkBookOwnership, function(req, res){
     Book.findById(req.params.id, function(err, foundBook){
         if(err){
             console.log(err);
@@ -94,7 +99,7 @@ app.get("/books/:id/edit", function(req, res){
 });
 
 // UPDATE - update the book info
-app.put("/books/:id", function(req, res){
+app.put("/books/:id", checkBookOwnership, function(req, res){
     Book.findByIdAndUpdate(req.params.id, req.body.book, function(err, updatedBook){
         if(err){
             console.log(err);
@@ -105,7 +110,7 @@ app.put("/books/:id", function(req, res){
 });
 
 // DELETE - remove the book from the database
-app.delete("/books/:id", function(req, res){
+app.delete("/books/:id", checkBookOwnership, function(req, res){
     Book.findByIdAndRemove(req.params.id, function(err){
         if(err){
             res.redirect("/books");
@@ -155,7 +160,7 @@ app.post("/books/:id/comments", isLoggedIn, function(req, res){
 });
 
 // EDIT - edit the comment
-app.get("/books/:id/comments/:comment_id/edit", function(req, res){
+app.get("/books/:id/comments/:comment_id/edit", checkCommentOwnership, function(req, res){
     Comment.findById(req.params.comment_id, function(err, foundComment){
         if(err){
             console.log(err);
@@ -167,7 +172,7 @@ app.get("/books/:id/comments/:comment_id/edit", function(req, res){
 });
 
 // UPDATE - update the edited comment
-app.put("/books/:id/comments/:comment_id", function(req, res){
+app.put("/books/:id/comments/:comment_id", checkCommentOwnership, function(req, res){
     Comment.findByIdAndUpdate(req.params.comment_id, req.body.comment, function(err, comment){
         if(err){
             console.log(err);
@@ -178,7 +183,7 @@ app.put("/books/:id/comments/:comment_id", function(req, res){
 });
 
 // DELETE - delete the comment
-app.delete("/books/:id/comments/:comment_id", function(req, res){
+app.delete("/books/:id/comments/:comment_id", checkCommentOwnership, function(req, res){
     Comment.findByIdAndRemove(req.params.comment_id, function(err){
         if(err){
             res.redirect("/books/"+ req.params.id);
@@ -236,6 +241,48 @@ function isLoggedIn(req, res, next){
         return next();
     }
     res.redirect("/login");
+}
+
+// authorization
+// for books
+function checkBookOwnership(req, res, next){
+    // check if user login
+    if(req.isAuthenticated()){
+        Book.findById(req.params.id, function(err, foundBook){
+            if(err){
+                res.redirect("back");
+            }else{
+                // check if user own book
+                if(foundBook.user.id.equals(req.user._id)){
+                    next();
+                }else{
+                    res.redirect("back");
+                }
+            }
+        })
+    }else{
+        res.redirect("/login");
+    }
+}
+
+// for comments
+function checkCommentOwnership(req, res, next){
+    if(req.isAuthenticated()){
+        Comment.findById(req.params.comment_id, function(err, comment){
+            if(err){
+                res.redirect("back");
+            }else{
+                // check if user own comment
+                if(comment.author.id.equals(req.user._id)){
+                    next();
+                }else{
+                    res.redirect("back");
+                }
+            }
+        })
+    }else{
+        res.redirect("/login");
+    }
 }
 
 app.listen(3000, function(){

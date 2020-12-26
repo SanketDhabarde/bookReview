@@ -8,7 +8,7 @@ var booksSchema = new mongoose.Schema({
     description: String,
     user: {
         id:{
-            type:mongoose.Schema.Types.ObjectId,
+            type: mongoose.Schema.Types.ObjectId,
             ref:"User"
         },
         username: String

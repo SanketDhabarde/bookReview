@@ -16,10 +16,12 @@
                     <p>
                         <em>Submitted by <%= book.user.username %></em>
                     </p>
-                    <a href="/books/<%=book._id%>/edit" class="btn btn-warning">edit info</a>
-                    <form action="/books/<%=book._id%>?_method=DELETE" id="deleteForm" method="POST">
-                        <button class="btn btn-danger">DELETE</button>
-                    </form>
+                   <% if(currentUser && book.user.id.equals(currentUser._id)){ %>
+                        <a href="/books/<%=book._id%>/edit" class="btn btn-warning">edit info</a>
+                        <form action="/books/<%=book._id%>?_method=DELETE" id="deleteForm" method="POST">
+                            <button class="btn btn-danger">DELETE</button>
+                        </form>
+                   <% } %>
                 </div>
                 
             </div>
@@ -33,10 +35,13 @@
                         <strong><%= comment.author.username %></strong> 
                         <em><span>  <%= comment.created.toDateString() %></span></em>
                         <p><%= comment.text%></p>
-                        <a href="/books/<%=book._id%>/comments/<%= comment._id %>/edit" class="btn btn-sm btn-warning">edit</a>
-                        <form action="/books/<%=book._id%>/comments/<%= comment._id%>?_method=DELETE" id="deleteForm" method="POST">
-                            <button class="btn btn-sm btn-danger">Delete</button>
-                        </form>
+                        <% if(currentUser && comment.author.id.equals(currentUser._id)){ %>
+                            <a href="/books/<%=book._id%>/comments/<%= comment._id %>/edit" class="btn btn-sm btn-warning">edit</a>
+                            <form action="/books/<%=book._id%>/comments/<%= comment._id%>?_method=DELETE" id="deleteForm" method="POST">
+                                <button class="btn btn-sm btn-danger">Delete</button>
+                            </form>
+                        <% } %>
+                        
                     </div>  
                    <% }) %>
                 </div>
