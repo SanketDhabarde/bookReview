@@ -29,6 +29,7 @@ router.post("/books", isLoggedIn, function(req, res){
             newBook.user.username = req.user.username;
             newBook.user.id = req.user._id;
             newBook.save();
+            req.flash("success", "Successfully submitted!");
             res.redirect("/books");
         }
     });
@@ -62,6 +63,7 @@ router.put("/books/:id", checkBookOwnership, function(req, res){
         if(err){
             console.log(err);
         }else{
+            req.flash("success", "Successfully Updated!");
             res.redirect("/books/"+ req.params.id);
         }
     });
@@ -73,6 +75,7 @@ router.delete("/books/:id", checkBookOwnership, function(req, res){
         if(err){
             res.redirect("/books");
         }else{
+            req.flash("success", "Successfully deleted!");
             res.redirect("/books");
         }
     });
@@ -83,6 +86,7 @@ function isLoggedIn(req, res, next){
     if(req.isAuthenticated()){
         return next();
     }
+    req.flash("error", "You need to login first!");
     res.redirect("/login");
 }
 
@@ -93,17 +97,20 @@ function checkBookOwnership(req, res, next){
     if(req.isAuthenticated()){
         Book.findById(req.params.id, function(err, foundBook){
             if(err){
+                req.flash("error", "Something went wrong!");
                 res.redirect("back");
             }else{
                 // check if user own book
                 if(foundBook.user.id.equals(req.user._id)){
                     next();
                 }else{
+                    req.flash("error", "You are not authorized to to that!");
                     res.redirect("back");
                 }
             }
         })
     }else{
+        req.flash("error", "You need to login first!");
         res.redirect("/login");
     }
 }
