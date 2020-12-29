@@ -10,7 +10,6 @@ var express = require("express"),
      flash = require("connect-flash"),
      bodyParser = require("body-parser");
 
-const { use } = require("./routes/books");
 var bookRoutes = require("./routes/books");
 var commentRoutes = require("./routes/comments");
 var indexRoutes = require("./routes/index");
@@ -21,9 +20,10 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.use(methodOverride("_method"));
 app.use(express.static(__dirname + "/public"));
 app.use(flash());
+require('dotenv').config();
 
 // DB config
-mongoose.connect('mongodb://localhost:27017/book_review', {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify:false});
+mongoose.connect(process.env.DATABASEURL , {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify:false});
 
 // passport config
 app.use(require("express-session")({
@@ -51,6 +51,6 @@ app.use(commentRoutes);
 app.use(indexRoutes);
 
 
-app.listen(3000, function(){
+app.listen(process.env.PORT, process.env.IP, function(){
     console.log("server is started....");
 });
