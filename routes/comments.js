@@ -92,8 +92,8 @@ function checkCommentOwnership(req, res, next){
                 req.flash("error", "Something went wrong!");
                 res.redirect("back");
             }else{
-                // check if user own comment
-                if(comment.author.id.equals(req.user._id)){
+                // check if user own comment or he is admin
+                if(comment.author.id.equals(req.user._id) || (req.user.username === "SanketDhabarde")){
                     next();
                 }else{
                     req.flash("error", "you are not authorized to do that!");

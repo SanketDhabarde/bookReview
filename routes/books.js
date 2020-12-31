@@ -100,8 +100,8 @@ function checkBookOwnership(req, res, next){
                 req.flash("error", "Something went wrong!");
                 res.redirect("back");
             }else{
-                // check if user own book
-                if(foundBook.user.id.equals(req.user._id)){
+                // check if user own book or he is admin
+                if(foundBook.user.id.equals(req.user._id) || (req.user.username == "SanketDhabarde")){
                     next();
                 }else{
                     req.flash("error", "You are not authorized to to that!");
