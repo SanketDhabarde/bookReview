@@ -2,14 +2,12 @@
 <div class="container mt-2">
     <div class="row">
         <div class="col-md-3">
-            <ul class="list-group">
+            <ul class="list-group mb-3">
                 <li class="list-group-item active" aria-current="true"><%=book.name%></li>
                 <li class="list-group-item"><strong>Author: </strong><%= book.author %></li>
                 <li class="list-group-item"><strong>Price: </strong>  <%= book.price %></li>
             </ul>
-        </div>
-        <div class="col-md-9">
-            <div class="img-thumbnail">
+            <div class="img-thumbnail mb-3">
                 <img src="<%= book.image %>" class="img-thumbnail showImg" alt="">
                 <div class="m-3">
                     <p><strong><%= book.name %></strong></p>
@@ -26,6 +24,8 @@
                 </div>
                 
             </div>
+        </div>
+        <div class="col-md-9">
             <div class="mt-3 p-2" id="comment">
                 <div class="m-3 text-end">
                     <a href="/books/<%=book._id%>/comments/new" class="btn btn-success">Add your review</a>
